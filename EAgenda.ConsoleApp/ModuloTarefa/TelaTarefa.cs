@@ -10,6 +10,13 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
     public class TelaTarefa : TelaBase, ICadastravel
     {
         RepositorioTarefa repoTarefa;
+
+        string tituloTarefa;
+        DateTime dataCriacao;
+        Prioridade prioridade = Prioridade.Normal;
+        List<Item> listaitens = new();
+        Item item;
+
         public TelaTarefa(RepositorioTarefa repoTar) : base("Cadastro de Tarefa")
         {
             repoTarefa = repoTar;
@@ -159,70 +166,81 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
         }
         private Tarefa InputarTarefa()
         {
-            string titulo;
-            DateTime dataCriacao;
-            Prioridade prioridade = Prioridade.Normal;
-            List<Item> listaitens = new();
-            Item item;
-
-            Console.Write("Título: ");
-            titulo = Console.ReadLine();
-
-            dataCriacao = DateTime.Today;
-            Console.WriteLine("\nData de criação: {0:dd/MM/yyy}", dataCriacao);
-            Console.ReadKey();
-
-            string opcao = "";
-
-            while (opcao != "2")
+            while (true)
             {
+                Console.Write("Título: ");
+                tituloTarefa = Console.ReadLine();
+
+                dataCriacao = DateTime.Today;
+                Console.WriteLine("\nData de criação: {0:dd/MM/yyy}", dataCriacao);
+                Console.ReadKey();
+
+                string opcao = "";
+
+                while (opcao != "2")
+                {
+                    Console.Clear();
+                    MostrarTitulo("Inserindo Tarefa");
+                    Console.Write("\nAdicionar ítem? [1- SIM] [2- NÂO] > ");
+                    opcao = Console.ReadLine();
+
+                    switch (opcao)
+                    {
+                        case "1":
+                            item = new();
+                            Console.Write("\nDescrição: ");
+                            item.descrição = Console.ReadLine();
+                            listaitens.Add(item);
+                            break;
+
+                        case "2":
+                            break;
+
+                        default:
+                            continue;
+                    }
+
+                }
+
                 Console.Clear();
                 MostrarTitulo("Inserindo Tarefa");
-                Console.Write("\nAdicionar ítem? [1- SIM] [2- NÂO] > ");
+                Console.Write("\nPrioridade desta tarefa: [1- Baixa] [2- Normal] [3- Alta] > ");
                 opcao = Console.ReadLine();
 
-                switch (opcao)
+                while (opcao == "1" || opcao == "2" || opcao == "3")
                 {
-                    case "1":
-                        item = new();
-                        Console.Write("\nDescrição: ");
-                        item.descrição = Console.ReadLine();
-                        listaitens.Add(item);
-                        break;
+                    switch (opcao)
+                    {
+                        case "1":
+                            prioridade = Prioridade.Baixa;
+                            break;
+                        case "2":
+                            prioridade = Prioridade.Normal;
+                            break;
+                        case "3":
+                            prioridade = Prioridade.Alta;
+                            break;
+                    }
 
-                    case "2":
-                        break;
-
-                    default:
-                        continue;
+                    break;
                 }
 
-            }
+                string status = Validar();
 
-            Console.Clear();
-            MostrarTitulo("Inserindo Tarefa");
-            Console.Write("\nPrioridade desta tarefa: [1- Baixa] [2- Normal] [3- Alta] > ");
-            opcao = Console.ReadLine();
-
-            while (opcao == "1" || opcao == "2" || opcao == "3")
-            {
-                switch (opcao)
+                if (status != "")
                 {
-                    case "1":
-                        prioridade = Prioridade.Baixa;
-                        break;
-                    case "2":
-                        prioridade = Prioridade.Normal;
-                        break;
-                    case "3":
-                        prioridade = Prioridade.Alta;
-                        break;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(status);
+                    Console.ResetColor();
+                    Console.ReadKey();
+                    Console.Clear();
+                    continue;
                 }
-
-                break;
+                else
+                    break;
             }
 
-            return new(titulo, listaitens, dataCriacao, prioridade);
+            return new(tituloTarefa, listaitens, dataCriacao, prioridade);
         }
         private void ApresentarInformacoes(Tarefa t) 
         {
@@ -248,10 +266,14 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
                 Console.Write(item.descrição + " - " + item.statusConclusao + "\n");
             }
         }
-
         protected override string Validar()
         {
-            throw new NotImplementedException();
+            string mensagem = "";
+
+            if (string.IsNullOrEmpty(tituloTarefa))
+                mensagem += "Campo 'Título' não pode ser vazio";
+
+            return mensagem;
         }
         #endregion
     }

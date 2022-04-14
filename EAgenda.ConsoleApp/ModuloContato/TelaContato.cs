@@ -133,6 +133,7 @@ namespace EAgenda.ConsoleApp.ModuloContato
             Console.ReadKey();
         }
 
+        #region métodos privados
         private void ApresentarInformacoes(Contato c)
         {
             Console.WriteLine($"ID: {c.Id} \n\r\n" +
@@ -181,7 +182,6 @@ namespace EAgenda.ConsoleApp.ModuloContato
 
             return new(nome, email, empresaPessoa, ramoNegocio, telefone);
         }
-
         protected override string Validar()
         {
             string mensagem = "";
@@ -200,6 +200,7 @@ namespace EAgenda.ConsoleApp.ModuloContato
 
             return mensagem;
         }
+        #endregion
 
 
     }

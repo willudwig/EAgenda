@@ -25,7 +25,6 @@ namespace EAgenda.ConsoleApp.Compartilhado.Superclasses
 
             Console.WriteLine();
         }
-
         protected int ObterNumero()
         {
             int num;
@@ -71,9 +70,7 @@ namespace EAgenda.ConsoleApp.Compartilhado.Superclasses
 
             Console.WriteLine();
         }
-
         protected abstract string Validar();
-
 
     }
 }
