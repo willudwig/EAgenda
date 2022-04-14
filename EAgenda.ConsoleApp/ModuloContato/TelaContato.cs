@@ -14,6 +14,12 @@ namespace EAgenda.ConsoleApp.ModuloContato
     {
         RepositorioContato repoContato;
 
+        string nome;
+        string email;
+        string empresaPessoa;
+        string ramoNegocio;
+        int telefone;
+
         public TelaContato(RepositorioContato repoContato) :base("Cadastro de Contato")
         {
             this.repoContato = repoContato;
@@ -141,30 +147,61 @@ namespace EAgenda.ConsoleApp.ModuloContato
         }
         private Contato InputarContato()
         {
-            string nome;
-            string email;
-            string empresaPessoa;
-            string ramoNegocio;
-            int telefone;
+            while (true)
+            {
+                Console.Write("Nome: ");
+                nome = Console.ReadLine();
 
-            Console.Write("Nome: ");
-            nome = Console.ReadLine();
+                Console.Write("E-mail: ");
+                email = Console.ReadLine();
 
-            Console.Write("E-mail: ");
-            email = Console.ReadLine();
+                Console.Write("Empresa do contato: ");
+                empresaPessoa = Console.ReadLine();
 
-            Console.Write("Empresa do contato: ");
-            empresaPessoa = Console.ReadLine();
+                Console.Write("Ramo de negócio ou cargo: ");
+                ramoNegocio = Console.ReadLine();
 
-            Console.Write("Ramo de negócio ou cargo: ");
-            ramoNegocio = Console.ReadLine();
+                Console.Write("Telefone: ");
+                try { telefone = Convert.ToInt32(Console.ReadLine()); }catch(Exception) { nota.ApresentarMensagem("Campo 'Telefone', erro no formato", TipoMensagem.Erro); }
 
-            Console.Write("Telefone: ");
-            telefone = Convert.ToInt32(Console.ReadLine());
+                string status = Validar();
+
+                if (status != "")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(status);
+                    Console.ResetColor();
+                    Console.ReadKey();
+                    Console.Clear();
+                    continue;
+                }
+                else 
+                    break;
+            }
 
             return new(nome, email, empresaPessoa, ramoNegocio, telefone);
         }
-        
+
+        protected override string Validar()
+        {
+            string mensagem = "";
+
+            if (string.IsNullOrEmpty(nome))
+                mensagem += "Campo 'Nome' não pode ser vazio\n";
+
+            if (!email.Contains("@"))
+                mensagem += "Campo 'E-mail' inválido\n";
+
+            if (string.IsNullOrEmpty(empresaPessoa))
+                mensagem += "Campo 'Empresa' não pode ser vazio\n";
+
+            if (telefone.ToString().Length < 8 || telefone.ToString().Length > 9)
+                mensagem += "Campo 'Telefone' inválido";
+
+            return mensagem;
+        }
+
 
     }
+    
 }

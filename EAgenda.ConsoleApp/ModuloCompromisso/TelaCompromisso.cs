@@ -10,7 +10,7 @@ using static EAgenda.ConsoleApp.Compartilhado.Superclasses.Notificador;
 
 namespace EAgenda.ConsoleApp.ModuloCompromisso
 {
-    public class TelaCompromisso : TelaBase, ICadastravel
+    public class TelaCompromisso : TelaBase
     {
         readonly RepositorioCompromisso repoCompromisso;
         readonly RepositorioContato repoContato;
@@ -253,6 +253,11 @@ namespace EAgenda.ConsoleApp.ModuloCompromisso
         {
             List<Contato> contatos = repoContato.SelecionarTodos();
             return contatos.Find(c => c.nome.Equals(nome));
+        }
+
+        protected override string Validar()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

@@ -22,34 +22,6 @@ namespace EAgenda.ConsoleApp.ModuloContato
             this.empresaPessoa = empresaPessoa;
             this.ramoNegocio = ramoNegocio;
             this.telefone = telefone;
-
-            string status = Validar();
-
-            if(status != "VÁLIDO")
-            {
-                Console.WriteLine(status);
-                Console.ReadKey();
-                return;
-            }
-        }
-
-        public override string Validar()
-        {
-            string mensagem = "VÁLIDO";
-
-            if (string.IsNullOrEmpty(nome))
-                mensagem += "Campo 'Nome' não pode ser vazio";
-
-            if (!email.Contains("@"))
-                mensagem += "Campo 'E-mail' inválido";
-
-            if (string.IsNullOrEmpty(empresaPessoa))
-                mensagem += "Campo 'Empresa' não pode ser vazio";
-
-            if (telefone.ToString().Length < 8 || telefone.ToString().Length > 9)
-                mensagem += "Campo 'Telefone' inválido";
-
-            return mensagem;
         }
     }
 }

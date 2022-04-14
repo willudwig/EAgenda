@@ -26,6 +26,5 @@ namespace EAgenda.ConsoleApp.ModuloCompromisso
             this.horaInicio = horaInicio;
             this.contatoRelacionado = contatoRelacionado;
         }
- 
     }
 }

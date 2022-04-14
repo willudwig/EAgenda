@@ -72,6 +72,8 @@ namespace EAgenda.ConsoleApp.Compartilhado.Superclasses
             Console.WriteLine();
         }
 
+        protected abstract string Validar();
+
 
     }
 }

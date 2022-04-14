@@ -11,9 +11,5 @@ namespace EAgenda.ConsoleApp.Compartilhado.Superclasses
         public Notificador nota = new();
         public int Id { get; set; }
 
-
-        public abstract string Validar();
-
- 
     }
 }

@@ -248,6 +248,11 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
                 Console.Write(item.descrição + " - " + item.statusConclusao + "\n");
             }
         }
+
+        protected override string Validar()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
