@@ -50,6 +50,8 @@ namespace EAgenda.ConsoleApp
                             case "6":
                                 telaCompromisso.VisualizarCompromissosFuturosPorPeriodo();
                                 break;
+                            default:
+                                break;
                         }
                     }
 
@@ -60,6 +62,8 @@ namespace EAgenda.ConsoleApp
                         {
                             case "5":
                                 telaCompromisso.VisualizarContatosPorCargo();
+                                break;
+                            default:
                                 break;
                         }
                     }

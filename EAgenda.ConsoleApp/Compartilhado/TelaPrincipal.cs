@@ -18,23 +18,34 @@ namespace EAgenda.ConsoleApp.Compartilhado
 
         public TelaBase ObterTela()
         {
-            string opcao = MostrarOpcoes();
             TelaBase tela = null;
 
-            switch (opcao)
+            while (true)
             {
-                case "1":
-                    tela = telaTarefa;
-                    break;
-                case "2":
-                    tela = telaContato;
-                    break;
-                case "3":
-                    tela = telaCompromisso;
-                    break;
-                case "s":
-                    Environment.Exit(0);
-                    break;
+                string opcao = MostrarOpcoes();
+
+                switch (opcao)
+                {
+                    case "1":
+                        tela = telaTarefa;
+                        break;
+                    case "2":
+                        tela = telaContato;
+                        break;
+                    case "3":
+                        tela = telaCompromisso;
+                        break;
+                    case "s":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("\nOpção inválida");
+                        Console.ReadKey();
+                        Console.Clear();
+                        continue;
+                }
+
+                break;
             }
 
             return tela;

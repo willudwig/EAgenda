@@ -10,11 +10,17 @@ using static EAgenda.ConsoleApp.Compartilhado.Superclasses.Notificador;
 
 namespace EAgenda.ConsoleApp.ModuloCompromisso
 {
-    public class TelaCompromisso : TelaBase
+    public class TelaCompromisso : TelaBase, ICadastravel
     {
         readonly RepositorioCompromisso repoCompromisso;
         readonly RepositorioContato repoContato;
         readonly TelaContato telaContato;
+
+        string assunto;
+        string local;
+        DateTime dataCompromisso;
+        DateTime horaInicio;
+        Contato contatoRelacionado;
 
         public TelaCompromisso(RepositorioCompromisso repositorioCompromisso, RepositorioContato repositorioContato, TelaContato telaContato) : base("Cadastro de Compromisso")
         {
@@ -32,7 +38,7 @@ namespace EAgenda.ConsoleApp.ModuloCompromisso
             Console.WriteLine("Digite 3 para Excluir");
             Console.WriteLine("Digite 4 para Visualizar");
             Console.WriteLine("Digite 5 para Visualizar Compromissos Passados");
-            Console.WriteLine("Digite 6 para Visualizar Compromissos Futuros por Período");
+            Console.WriteLine("Digite 6 para Visualizar Compromissos Futuros por Período\n");
 
             Console.WriteLine("Digite s para sair\n");
             Console.Write("> ");
@@ -187,36 +193,60 @@ namespace EAgenda.ConsoleApp.ModuloCompromisso
         #region métodos privados
         private Compromisso InputarCompromisso()
         {
-            string assunto;
-            string local;
-            DateTime dataCompromisso;
-            DateTime horaInicio;
-            Contato contatoRelacionado;
-
-            Console.Write("Assunto: ");
-            assunto = Console.ReadLine();
-
-            Console.Write("Local: ");
-            local = Console.ReadLine();
-
-            Console.Write("Data do compromisso: ");
-            DateTime.TryParse(Console.ReadLine(), out dataCompromisso);
-
-            Console.Write("Hora de início: ");
-            DateTime.TryParse(Console.ReadLine(), out horaInicio);
-
-            Console.Write("Nome do contato: ");
-            string nome = Console.ReadLine();
-
-            contatoRelacionado = BuscarContatoExistente(nome);
-
-            if (contatoRelacionado != null)
-                nota.ApresentarMensagem("O nome digitado está na sua lista de contatos.", TipoMensagem.Sucesso);
-            else
+            while (true)
             {
-                nota.ApresentarMensagem("O nome digitado não está na sua lista de contatos. Por favor, adicione a seguir:\n", TipoMensagem.Atencao);
-                telaContato.InserirRegistro();
+                Console.Write("Assunto: ");
+                assunto = Console.ReadLine();
+
+                Console.Write("Local: ");
+                local = Console.ReadLine();
+
+                Console.Write("Data do compromisso: ");
+                DateTime.TryParse(Console.ReadLine(), out dataCompromisso);
+
+                Console.Write("Hora de início: ");
+                DateTime.TryParse(Console.ReadLine(), out horaInicio);
+
+                string status = Validar();
+
+                if (status != "")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(status);
+                    Console.ResetColor();
+                    Console.ReadKey();
+                    Console.Clear();
+                    continue;
+                }
+
+                string nome;
+
+                while (true)
+                {
+                    Console.Write("Nome do contato: ");
+                    nome = Console.ReadLine();
+
+                    if (string.IsNullOrEmpty(nome))
+                    {
+                        nota.ApresentarMensagem("O campo 'Nome do contato' não pode ser vazio", TipoMensagem.Erro);
+                        continue;
+                    }
+                    else
+                        break;
+                }
+
                 contatoRelacionado = BuscarContatoExistente(nome);
+
+                if (contatoRelacionado != null)
+                    nota.ApresentarMensagem("O nome digitado está na sua lista de contatos.", TipoMensagem.Sucesso);
+                else
+                {
+                    nota.ApresentarMensagem("O nome digitado não está na sua lista de contatos. Por favor, adicione a seguir:\n", TipoMensagem.Atencao);
+                    telaContato.InserirRegistro();
+                    contatoRelacionado = BuscarContatoExistente(nome);
+                }
+
+                break;
             }
   
             return new(assunto, local, dataCompromisso, horaInicio, contatoRelacionado);
@@ -254,10 +284,23 @@ namespace EAgenda.ConsoleApp.ModuloCompromisso
             List<Contato> contatos = repoContato.SelecionarTodos();
             return contatos.Find(c => c.nome.Equals(nome));
         }
-
         protected override string Validar()
         {
-            throw new NotImplementedException();
+            string mensagem = "";
+
+            if (string.IsNullOrEmpty(assunto))
+                mensagem += "Campo 'Assunto' não pode ser vazio\n";
+
+            if(string.IsNullOrEmpty(local))
+                mensagem += "Campo 'Local' não pode ser vazio\n";
+
+            if (dataCompromisso < DateTime.Today)
+                mensagem += "Campo 'Data' não pode ser inferior a hoje\n";
+            
+            if (horaInicio.Equals(false))
+                mensagem += "Campo 'Hora de início' inválido";
+
+            return mensagem;
         }
         #endregion
     }
