@@ -3,6 +3,7 @@ using EAgenda.ConsoleApp.Compartilhado.Interfaces;
 using EAgenda.ConsoleApp.Compartilhado.Superclasses;
 using EAgenda.ConsoleApp.ModuloCompromisso;
 using EAgenda.ConsoleApp.ModuloContato;
+using EAgenda.ConsoleApp.ModuloTarefa;
 using System;
 
 namespace EAgenda.ConsoleApp
@@ -62,6 +63,22 @@ namespace EAgenda.ConsoleApp
                         {
                             case "5":
                                 telaCompromisso.VisualizarContatosPorCargo();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    if (telaSelecionada is TelaTarefa)
+                    {
+                        TelaTarefa telaTarefa = (TelaTarefa)telaSelecionada;
+                        switch (opcaoSelecionada)
+                        {
+                            case "5":
+                                telaTarefa.VisualizarTarefasPendentes();
+                                break;
+                            case "6":
+                                telaTarefa.VisualizarTarefasConcluidas();
                                 break;
                             default:
                                 break;

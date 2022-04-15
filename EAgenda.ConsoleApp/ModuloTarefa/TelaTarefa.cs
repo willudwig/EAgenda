@@ -86,6 +86,60 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
 
             Console.ReadKey();
         }
+        public void VisualizarTarefasPendentes()
+        {
+            List<Tarefa> pendentes = repoTarefa.ObterTarefasPendentes();
+
+            if(pendentes.Count.Equals(0))
+            {
+                Console.Clear();
+                MostrarTitulo("Tarefas Pendentes");
+                nota.ApresentarMensagem("Não há tarefas pendentes", TipoMensagem.Atencao);
+                return;
+            }
+
+            Console.Clear();
+            MostrarTitulo("Tarefas Pendentes");
+
+            foreach (Tarefa item in pendentes)  
+                     ApresentarInformacoes(item);
+        }
+        public void VisualizarTarefasConcluidas()
+        {
+            List<Tarefa> concluidas = repoTarefa.ObterTarefasConcluidas();
+
+            if (concluidas.Count.Equals(0))
+            {
+                Console.Clear();
+                MostrarTitulo("Tarefas Concluídas");
+                nota.ApresentarMensagem("Não há tarefas concluídas", TipoMensagem.Atencao);
+                return;
+            }
+
+            Console.Clear();
+            MostrarTitulo("Tarefas Concluídas");
+
+            foreach (Tarefa item in concluidas)
+                ApresentarInformacoes(item);
+        }
+        public override string MostrarOpcoes()
+        {
+            MostrarTitulo(titulo);
+
+            Console.WriteLine("Digite 1 para Inserir");
+            Console.WriteLine("Digite 2 para Editar");
+            Console.WriteLine("Digite 3 para Excluir");
+            Console.WriteLine("Digite 4 para Visualizar");
+            Console.WriteLine("Digite 5 para Visualizar Tarefas Pendentes");
+            Console.WriteLine("Digite 6 para Visualizar tarefas Concluídas");
+
+            Console.WriteLine("Digite s para sair\n");
+            Console.Write("> ");
+
+            string opcao = Console.ReadLine();
+
+            return opcao;
+        }
 
         #region métodos privados
         private void AlterarTarefa(Tarefa tarefaEditada)

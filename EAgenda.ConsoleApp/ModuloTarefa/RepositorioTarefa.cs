@@ -1,10 +1,7 @@
 ﻿using EAgenda.ConsoleApp.Compartilhado.Superclasses;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EAgenda.ConsoleApp.Compartilhado;
+
 
 namespace EAgenda.ConsoleApp.ModuloTarefa
 {
@@ -14,12 +11,32 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
 
         public List<Tarefa> ObterTarefasPendentes()
         {
-            return registro.FindAll(tarefa => tarefa.listaItems.Equals(true));
-        }
+            List<Tarefa> tarefas = SelecionarTodos();
 
+            List<Tarefa> pendentes = new();
+
+            for ( int i = 0 ; i < tarefas.Count; i++)
+            {
+                if(tarefas[i].PercentualConclusao != "0%")
+                   pendentes.Add(tarefas[i]);
+            }
+            
+            return pendentes;
+
+        }
         public List<Tarefa> ObterTarefasConcluidas()
         {
-            return registro.FindAll(tarefa => tarefa.listaItems.Equals(true));
+            List<Tarefa> tarefas = SelecionarTodos();
+
+            List<Tarefa> concluidas = new();
+
+            for (int i = 0; i < tarefas.Count; i++)
+            {
+                if (tarefas[i].PercentualConclusao.Equals("0%"))
+                    concluidas.Add(tarefas[i]);
+            }
+
+            return concluidas;
         }
 
     }
