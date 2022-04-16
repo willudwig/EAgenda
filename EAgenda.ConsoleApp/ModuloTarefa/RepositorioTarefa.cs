@@ -13,14 +13,8 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
         {
             List<Tarefa> tarefas = SelecionarTodos();
 
-            List<Tarefa> pendentes = new();
+            List<Tarefa> pendentes = tarefas.FindAll(t => !t.PercentualConclusao.Equals("0%"));
 
-            for ( int i = 0 ; i < tarefas.Count; i++)
-            {
-                if(tarefas[i].PercentualConclusao != "0%")
-                   pendentes.Add(tarefas[i]);
-            }
-            
             return pendentes;
 
         }
@@ -28,13 +22,7 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
         {
             List<Tarefa> tarefas = SelecionarTodos();
 
-            List<Tarefa> concluidas = new();
-
-            for (int i = 0; i < tarefas.Count; i++)
-            {
-                if (tarefas[i].PercentualConclusao.Equals("0%"))
-                    concluidas.Add(tarefas[i]);
-            }
+            List<Tarefa> concluidas = tarefas.FindAll(t => t.PercentualConclusao.Equals("0%"));
 
             return concluidas;
         }
