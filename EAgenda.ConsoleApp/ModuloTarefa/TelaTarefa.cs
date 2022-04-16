@@ -14,7 +14,7 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
         string tituloTarefa;
         DateTime dataCriacao;
         Prioridade prioridade = Prioridade.Normal;
-        List<Item> listaitens = new();
+        List<Item> listaItens;
         Item item;
 
         public TelaTarefa(RepositorioTarefa repoTar) : base("Cadastro de Tarefa")
@@ -101,8 +101,12 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
             Console.Clear();
             MostrarTitulo("Tarefas Pendentes");
 
+            pendentes.Sort(); // ordena por prioridade (de Alta a Baixa)
+
             foreach (Tarefa item in pendentes)  
                      ApresentarInformacoes(item);
+
+            Console.ReadKey();
         }
         public void VisualizarTarefasConcluidas()
         {
@@ -121,6 +125,8 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
 
             foreach (Tarefa item in concluidas)
                 ApresentarInformacoes(item);
+
+            Console.ReadKey();
         }
         public override string MostrarOpcoes()
         {
@@ -220,6 +226,8 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
         }
         private Tarefa InputarTarefa()
         {
+            listaItens = new();
+
             while (true)
             {
                 Console.Write("Título: ");
@@ -244,7 +252,7 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
                             item = new();
                             Console.Write("\nDescrição: ");
                             item.descrição = Console.ReadLine();
-                            listaitens.Add(item);
+                            listaItens.Add(item);
                             break;
 
                         case "2":
@@ -294,16 +302,19 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
                     break;
             }
 
-            return new(tituloTarefa, listaitens, dataCriacao, prioridade);
+            Tarefa novaTarefa = new(tituloTarefa, listaItens, dataCriacao, prioridade);
+            novaTarefa.PercentualConclusao = "100%";
+
+            return novaTarefa;
         }
         private void ApresentarInformacoes(Tarefa t) 
         {
-            Console.WriteLine($"ID: {t.Id} \n\r\n"+
-                              $"Título................: {t.titulo}\n\r"+
-                              $"Data de criação.......: {t.dataCriacao:dd/MM/yyy}\n\r"+
-                              $"Data de conclusão.....: {t.dataConclusao:dd/MM/yyy}\n\r"+
-                              $"Prioridade............: {t.prioridade}\n\r"+
-                              $"Percentual concluido..: {t.PercentualConclusao}\n\r"+
+            Console.WriteLine($"ID: {t.Id}\n\r\n"+
+                              $"Título.................: {t.titulo}\n\r"+
+                              $"Data de criação........: {t.dataCriacao:dd/MM/yyy}\n\r"+
+                              $"Data de conclusão......: {t.dataConclusao:dd/MM/yyy}\n\r"+
+                              $"Prioridade.............: {t.prioridade}\n\r"+
+                              $"Percentual a concluir..: {t.PercentualConclusao}\n\r"+
                               $"\nÍTENS - STATUS\n"
                 );
 
@@ -329,6 +340,7 @@ namespace EAgenda.ConsoleApp.ModuloTarefa
 
             return mensagem;
         }
+
         #endregion
     }
 }
